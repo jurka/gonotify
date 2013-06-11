@@ -4,17 +4,17 @@ import (
 	"sync"
 )
 
-type notifyer struct {
+type Notifyer struct {
 	subscribers         []chan bool
 	subscriptionAllowed bool
 	lock                sync.Mutex
 }
 
-func New() *notifyer {
-	return &notifyer{subscribers: make([]chan bool, 0), subscriptionAllowed: true}
+func New() *Notifyer {
+	return &Notifyer{subscribers: make([]chan bool, 0), subscriptionAllowed: true}
 }
 
-func (this *notifyer) Subscribe() (<-chan bool, bool) {
+func (this *Notifyer) Subscribe() (<-chan bool, bool) {
 	z := make(chan bool, 1)
 	this.lock.Lock()
 	as := this.subscriptionAllowed
@@ -27,7 +27,7 @@ func (this *notifyer) Subscribe() (<-chan bool, bool) {
 	return z, true
 }
 
-func (this *notifyer) Notify() bool {
+func (this *Notifyer) Notify() bool {
 	this.lock.Lock()
 	val := this.subscriptionAllowed
 	this.subscriptionAllowed = false
